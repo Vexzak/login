@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --border: #d0d9f0;
+    --accent: #2563eb;
+    --accent-light: #eff4ff;
+    --text: #1a1f36;
+    --muted: #8492b4;
+    --error: #e53e3e;
+    --success: #2d9e6b;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%);
+    top: -200px; right: -200px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem 1.8rem;
+    width: 100%; max-width: 420px;
+    position: relative;
+    margin: 2rem auto;
+    box-shadow: 0 4px 24px rgba(37,99,235,0.08);
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1px solid rgba(37,99,235,0.2);
+    margin-bottom: 1rem;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    line-height: 1.15;
+    margin-bottom: 0.3rem;
+    color: var(--text);
+  }
+
+  h1 em { color: var(--accent); font-style: italic; }
+
+  .sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .group {
+    margin-bottom: 0.8rem;
+    position: relative;
+  }
+
+  label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+    background: #f8faff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    background: #fff;
+  }
+
+  input.error-field { border-color: var(--error); }
+
+  .field-error {
+    color: var(--error);
+    font-size: 0.78rem;
+    margin-top: 4px;
+    display: none;
+  }
+
+  .strength-bar {
+    display: flex; gap: 4px; margin-top: 8px;
+  }
+  .strength-bar span {
+    flex: 1; height: 4px; background: var(--border); border-radius: 10px;
+    transition: background 0.3s;
+  }
+  .strength-label {
+    font-size: 0.75rem; color: var(--muted); margin-top: 4px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1.2rem;
+    transition: transform 0.15s, opacity 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.35); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .divider {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 1.2rem 0;
+    position: relative;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%; width: 38%;
+    height: 1px; background: var(--border);
+  }
+  .divider::before { left: 0; }
+  .divider::after { right: 0; }
+
+  .login-link {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .login-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .server-msg {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .server-msg.error { background: #fff5f5; border: 1px solid #fed7d7; color: var(--error); }
+  .server-msg.success { background: #f0fff4; border: 1px solid #c6f6d5; color: var(--success); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="badge">New Account</div>
+  <h1>Create your<br><em>account</em></h1>
+  <p class="sub">Secure and private. Always.</p>
+
+  <div class="server-msg" id="serverMsg"></div>
+
+  <form id="signupForm" novalidate>
+    <div class="group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" autocomplete="name" placeholder="Jane Doe" />
+      <div class="field-error" id="nameErr">Please enter your name.</div>
+    </div>
+
+    <div class="group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" autocomplete="email" placeholder="jane@example.com" />
+      <div class="field-error" id="emailErr">Enter a valid email address.</div>
+    </div>
+
+    <div class="group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="new-password" placeholder="Min. 8 characters" />
+      <div class="strength-bar">
+        <span id="s1"></span><span id="s2"></span><span id="s3"></span><span id="s4"></span>
+      </div>
+      <div class="strength-label" id="strengthLabel"></div>
+      <div class="field-error" id="passErr">Password must be at least 8 characters with a number and symbol.</div>
+    </div>
+
+    <div class="group">
+      <label for="confirm">Confirm Password</label>
+      <input type="password" id="confirm" name="confirm" autocomplete="new-password" placeholder="Repeat password" />
+      <div class="field-error" id="confirmErr">Passwords do not match.</div>
+    </div>
+
+    <button class="btn" type="submit" id="submitBtn">Create Account</button>
+  </form>
+
+  <div class="divider">or</div>
+  <div class="login-link">Already have an account? <a href="login.html">Sign in</a></div>
+</div>
+
+<script>
+  const colors = ['#e53e3e','#dd6b20','#d69e2e','#2d9e6b'];
+
+  function scorePassword(pw) {
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    return score;
+  }
+
+  document.getElementById('password').addEventListener('input', function() {
+    const score = scorePassword(this.value);
+    const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById('s' + i);
+      el.style.background = i <= score ? colors[score - 1] : 'var(--border)';
+    }
+    document.getElementById('strengthLabel').textContent = this.value ? labels[score] : '';
+  });
+
+  function showError(inputId, errId, show) {
+    const input = document.getElementById(inputId);
+    const err = document.getElementById(errId);
+    if (show) {
+      input.classList.add('error-field');
+      err.style.display = 'block';
+    } else {
+      input.classList.remove('error-field');
+      err.style.display = 'none';
+    }
+    return show;
+  }
+
+  document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm').value;
+    const serverMsg = document.getElementById('serverMsg');
+    serverMsg.style.display = 'none';
+
+    let hasError = false;
+    hasError |= showError('name', 'nameErr', !name);
+    hasError |= showError('email', 'emailErr', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+    hasError |= showError('password', 'passErr', scorePassword(password) < 3);
+    hasError |= showError('confirm', 'confirmErr', password !== confirm);
+
+    if (hasError) return;
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+        credentials: 'include'
+      });
+      const data = await res.json();
+      if (res.ok) {
+        serverMsg.className = 'server-msg success';
+        serverMsg.textContent = 'Account created! Redirecting...';
+        serverMsg.style.display = 'block';
+        setTimeout(() => window.location.href = `welcome.html?name=${encodeURIComponent(name)}&mode=signup`, 1500);
+      } else {
+        serverMsg.className = 'server-msg error';
+        serverMsg.textContent = data.message || 'Something went wrong.';
+        serverMsg.style.display = 'block';
+      }
+    } catch {
+      serverMsg.className = 'server-msg error';
+      serverMsg.textContent = 'Network error. Please try again.';
+      serverMsg.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    }
+  });
+</script>
+</body>
+</html>

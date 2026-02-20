@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f0f4ff;
+    --surface: #ffffff;
+    --border: #d0d9f0;
+    --accent: #2563eb;
+    --accent-light: #eff4ff;
+    --text: #1a1f36;
+    --muted: #8492b4;
+    --error: #e53e3e;
+    --success: #2d9e6b;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    overflow: hidden;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%);
+    bottom: -200px; left: -200px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    width: 100%; max-width: 420px;
+    box-shadow: 0 4px 24px rgba(37,99,235,0.08);
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    border: 1px solid rgba(37,99,235,0.2);
+    margin-bottom: 1.2rem;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1.15;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+
+  .sub {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .sub a { color: var(--accent); font-weight: 600; text-decoration: none; }
+
+  .group {
+    margin-bottom: 1.1rem;
+  }
+
+  label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  label a {
+    color: var(--accent);
+    text-decoration: none;
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  input {
+    width: 100%;
+    background: #f8faff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    background: #fff;
+  }
+
+  input.error-field { border-color: var(--error); }
+
+  .field-error {
+    color: var(--error);
+    font-size: 0.78rem;
+    margin-top: 5px;
+    display: none;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+  }
+  .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.35); }
+  .btn:active { transform: translateY(0); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .server-msg {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  .server-msg.error { background: #fff5f5; border: 1px solid #fed7d7; color: var(--error); }
+  .server-msg.success { background: #f0fff4; border: 1px solid #c6f6d5; color: var(--success); }
+
+  .divider {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%; width: 38%;
+    height: 1px; background: var(--border);
+  }
+  .divider::before { left: 0; }
+  .divider::after { right: 0; }
+
+  .signup-link {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .signup-link a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+  }
+  .shake { animation: shake 0.4s ease; }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="badge">Welcome back</div>
+  <h1>Sign into<br>your <em>account</em></h1>
+  <p class="sub">Don't have an account? <a href="signup.html">Sign up free</a></p>
+
+  <div class="server-msg" id="serverMsg"></div>
+
+  <form id="loginForm" novalidate>
+    <div class="group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" autocomplete="email" placeholder="jane@example.com" />
+      <div class="field-error" id="emailErr">Enter a valid email address.</div>
+    </div>
+
+    <div class="group">
+      <label for="password">
+        Password
+        <a href="/forgot-password">Forgot?</a>
+      </label>
+      <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Your password" />
+      <div class="field-error" id="passErr">Password is required.</div>
+    </div>
+
+    <button class="btn" type="submit" id="submitBtn">Sign In</button>
+  </form>
+
+  <div class="divider">or</div>
+  <div class="signup-link">New here? <a href="signup.html">Create an account</a></div>
+</div>
+
+<script>
+  let attempts = 0;
+  const MAX_ATTEMPTS = 5;
+  let lockUntil = null;
+
+  function showError(inputId, errId, show) {
+    document.getElementById(inputId).classList.toggle('error-field', show);
+    document.getElementById(errId).style.display = show ? 'block' : 'none';
+    return show;
+  }
+
+  function isLocked() {
+    if (!lockUntil) return false;
+    if (Date.now() < lockUntil) return true;
+    lockUntil = null; attempts = 0;
+    return false;
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const serverMsg = document.getElementById('serverMsg');
+    serverMsg.style.display = 'none';
+
+    if (isLocked()) {
+      const secs = Math.ceil((lockUntil - Date.now()) / 1000);
+      serverMsg.className = 'server-msg error';
+      serverMsg.textContent = `Too many attempts. Try again in ${secs}s.`;
+      serverMsg.style.display = 'block';
+      return;
+    }
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    let hasError = false;
+    hasError |= showError('email', 'emailErr', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+    hasError |= showError('password', 'passErr', !password);
+    if (hasError) return;
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include'
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        serverMsg.className = 'server-msg success';
+        serverMsg.textContent = 'Signed in! Redirecting...';
+        serverMsg.style.display = 'block';
+        attempts = 0;
+        const userName = data.user?.name || '';
+        setTimeout(() => window.location.href = `welcome.html?name=${encodeURIComponent(userName)}&mode=login`, 1200);
+      } else {
+        attempts++;
+        const card = document.getElementById('card');
+        card.classList.remove('shake');
+        void card.offsetWidth;
+        card.classList.add('shake');
+
+        serverMsg.className = 'server-msg error';
+        if (attempts >= MAX_ATTEMPTS) {
+          lockUntil = Date.now() + 60 * 1000;
+          serverMsg.textContent = 'Too many failed attempts. Locked for 60 seconds.';
+        } else {
+          serverMsg.textContent = data.message || 'Invalid email or password.';
+        }
+        serverMsg.style.display = 'block';
+      }
+    } catch {
+      serverMsg.className = 'server-msg error';
+      serverMsg.textContent = 'Network error. Please try again.';
+      serverMsg.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  });
+</script>
+</body>
+</html>
